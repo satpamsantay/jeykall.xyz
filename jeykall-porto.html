@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>0xjeykall — COMIC</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Fredoka:wght@400;500;600;700&family=Comic+Neue:wght@300;400;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --yellow: #FFD700;
+      --orange: #FF6B35;
+      --red: #EF233C;
+      --blue: #4361EE;
+      --cyan: #00B4D8;
+      --green: #06D6A0;
+      --purple: #9B5DE5;
+      --black: #1A1A1A;
+      --white: #FEFEFE;
+      --gray: #E8E8E8;
+      --dark: #2B2B2B;
+    }
+
+    body {
+      background: var(--white);
+      color: var(--black);
+      font-family: 'Fredoka', sans-serif;
+      line-height: 1.5;
+    }
+
+    /* === COMIC PATTERN BG === */
+    .comic-bg {
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background-image: radial-gradient(circle, #DDD 1px, transparent 1px);
+      background-size: 20px 20px;
+      opacity: .25;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .container { max-width: 780px; margin: 0 auto; padding: 0 20px; position: relative; z-index: 1; }
+
+    /* === SPEECH BUBBLE === */
+    .speech {
+      position: relative;
+      background: var(--white);
+      border: 3px solid var(--black);
+      border-radius: 20px;
+      padding: 20px 24px;
+      margin-bottom: 24px;
+      box-shadow: 6px 6px 0 var(--black);
+    }
+    .speech::after {
+      content: '';
+      position: absolute;
+      bottom: -18px;
+      left: 40px;
+      width: 0; height: 0;
+      border-left: 14px solid transparent;
+      border-right: 14px solid transparent;
+      border-top: 18px solid var(--white);
+      filter: drop-shadow(0 3px 0 var(--black));
+    }
+    .speech::before {
+      content: '';
+      position: absolute;
+      bottom: -24px;
+      left: 36px;
+      width: 0; height: 0;
+      border-left: 18px solid transparent;
+      border-right: 18px solid transparent;
+      border-top: 22px solid var(--black);
+      z-index: -1;
+    }
+
+    .speech p {
+      font-family: 'Comic Neue', cursive;
+      font-size: 17px;
+      font-weight: 700;
+      line-height: 1.4;
+    }
+
+    /* === NAV === */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: var(--yellow);
+      border-bottom: 3px solid var(--black);
+      padding: 12px 0;
+    }
+    nav .container { display: flex; align-items: center; justify-content: space-between; }
+    .logo {
+      font-family: 'Bangers', cursive;
+      font-size: 24px;
+      letter-spacing: 1px;
+      color: var(--black);
+      text-shadow: 2px 2px 0 var(--orange);
+    }
+    .nav-links { display: flex; gap: 4px; list-style: none; flex-wrap: wrap; }
+    .nav-links a {
+      display: block;
+      font-family: 'Bangers', cursive;
+      font-size: 16px;
+      letter-spacing: .5px;
+      padding: 6px 14px;
+      background: var(--white);
+      border: 2px solid var(--black);
+      color: var(--black);
+      text-decoration: none;
+      transition: none;
+    }
+    .nav-links a:hover {
+      background: var(--orange);
+      color: var(--white);
+    }
+
+    /* === HERO === */
+    .hero {
+      padding: 60px 0 40px;
+      position: relative;
+    }
+
+    /* STARBURST */
+    .starburst {
+      display: inline-block;
+      background: var(--red);
+      color: var(--white);
+      font-family: 'Bangers', cursive;
+      font-size: 14px;
+      padding: 6px 18px;
+      transform: rotate(-3deg);
+      border: 2px solid var(--black);
+      margin-bottom: 16px;
+      box-shadow: 3px 3px 0 var(--black);
+    }
+
+    .hero-main {
+      display: grid;
+      grid-template-columns: 130px 1fr;
+      gap: 28px;
+      align-items: start;
+    }
+    @media (max-width: 550px) { .hero-main { grid-template-columns: 1fr; } }
+
+    /* COMIC AVATAR */
+    .comic-frame {
+      position: relative;
+      width: 130px;
+      border: 3px solid var(--black);
+      background: var(--white);
+      padding: 4px;
+      box-shadow: 5px 5px 0 var(--black);
+      transform: rotate(-2deg);
+    }
+    .comic-frame img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border: 2px solid var(--black);
+    }
+    .comic-frame .label {
+      position: absolute;
+      bottom: -14px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--yellow);
+      font-family: 'Bangers', cursive;
+      font-size: 11px;
+      padding: 2px 12px;
+      border: 2px solid var(--black);
+      white-space: nowrap;
+    }
+
+    .hero h1 {
+      font-family: 'Bangers', cursive;
+      font-size: clamp(36px, 8vw, 60px);
+      line-height: 1;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--black);
+      margin-bottom: 2px;
+    }
+    .hero h1 .hl { color: var(--blue); text-shadow: 2px 2px 0 var(--black); }
+    .hero h1 .hl2 { color: var(--red); }
+    .hero .subtitle {
+      font-family: 'Comic Neue', cursive;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--dark);
+      margin-bottom: 4px;
+    }
+    .hero .handle-comic {
+      font-family: 'Comic Neue', cursive;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--purple);
+      margin-bottom: 12px;
+    }
+    .hero .handle-comic a { color: var(--purple); text-decoration: none; border-bottom: 2px dashed var(--purple); }
+    .hero .handle-comic a:hover { color: var(--red); border-bottom-color: var(--red); }
+
+    /* ACTION BUTTONS */
+    .hero-acts {
+      display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px;
+    }
+    .hero-acts a {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-family: 'Bangers', cursive;
+      font-size: 15px;
+      letter-spacing: .5px;
+      padding: 8px 18px;
+      border: 2px solid var(--black);
+      background: var(--white);
+      color: var(--black);
+      text-decoration: none;
+      box-shadow: 3px 3px 0 var(--black);
+      transition: none;
+    }
+    .hero-acts a:hover {
+      background: var(--black);
+      color: var(--white);
+      box-shadow: none;
+      transform: translate(3px, 3px);
+    }
+    .hero-acts a.x-btn { background: var(--black); color: var(--white); }
+    .hero-acts a.x-btn:hover { background: var(--blue); }
+
+    /* === COMIC STATS === */
+    .comic-stats {
+      display: flex; gap: 16px; flex-wrap: wrap;
+      margin-top: 20px;
+      padding: 16px 0;
+    }
+    .c-stat {
+      display: flex; flex-direction: column; align-items: center;
+    }
+    .c-stat .num {
+      font-family: 'Bangers', cursive;
+      font-size: 26px;
+      color: var(--red);
+      letter-spacing: 1px;
+      line-height: 1;
+    }
+    .c-stat .lbl {
+      font-family: 'Comic Neue', cursive;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--dark);
+      text-transform: uppercase;
+    }
+
+    /* === PANELS === */
+    .panel {
+      border: 3px solid var(--black);
+      padding: 32px 28px;
+      margin-bottom: 24px;
+      position: relative;
+      background: var(--white);
+    }
+    .panel + .panel { border-top: none; margin-top: -24px; }
+
+    .panel-label {
+      display: inline-block;
+      font-family: 'Bangers', cursive;
+      font-size: 13px;
+      letter-spacing: 1px;
+      padding: 3px 14px;
+      background: var(--yellow);
+      border: 2px solid var(--black);
+      box-shadow: 3px 3px 0 var(--black);
+      margin-bottom: 16px;
+      transform: rotate(-2deg);
+    }
+
+    .panel h2 {
+      font-family: 'Bangers', cursive;
+      font-size: 26px;
+      letter-spacing: .5px;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+    .panel h2 .hl { color: var(--blue); }
+    .panel h2 .hl2 { color: var(--orange); }
+
+    .panel p {
+      font-family: 'Comic Neue', cursive;
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.6;
+      color: var(--dark);
+      max-width: 560px;
+    }
+    .panel p strong { font-weight: 700; color: var(--black); }
+
+    /* GRID PANEL */
+    .panel-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    @media (max-width: 500px) { .panel-grid { grid-template-columns: 1fr; } }
+    .panel-box {
+      border: 2px solid var(--black);
+      padding: 16px;
+      background: var(--gray);
+    }
+    .panel-box:nth-child(1) { background: #FFF3E0; }
+    .panel-box:nth-child(2) { background: #E3F2FD; }
+    .panel-box h3 {
+      font-family: 'Bangers', cursive;
+      font-size: 16px;
+      letter-spacing: .5px;
+      margin-bottom: 8px;
+    }
+    .panel-box ul { list-style: none; }
+    .panel-box li {
+      font-family: 'Comic Neue', cursive;
+      font-size: 14px;
+      font-weight: 400;
+      padding: 3px 0;
+      color: var(--dark);
+    }
+    .panel-box li::before { content: '>> '; font-family: 'Bangers', cursive; color: var(--orange); }
+
+    /* === COMIC STRIP (writing) === */
+    .comic-strip { }
+    .strip-item {
+      display: block;
+      border: 2px solid var(--black);
+      padding: 16px 20px;
+      margin-bottom: -1px;
+      background: var(--white);
+      text-decoration: none;
+      color: var(--black);
+      transition: none;
+      position: relative;
+    }
+    .strip-item:hover { background: #FFF8E1; }
+    .strip-item .meta {
+      font-family: 'Bangers', cursive;
+      font-size: 11px;
+      letter-spacing: .5px;
+      color: var(--purple);
+      margin-bottom: 2px;
+    }
+    .strip-item h4 {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 16px;
+      font-weight: 600;
+    }
+    .strip-item p {
+      font-family: 'Comic Neue', cursive;
+      font-size: 14px;
+      color: var(--dark);
+    }
+
+    /* === SKILLS === */
+    .skill-cloud {
+      display: flex; flex-wrap: wrap; gap: 6px;
+    }
+    .skill-cloud .s {
+      font-family: 'Bangers', cursive;
+      font-size: 14px;
+      letter-spacing: .5px;
+      padding: 4px 14px;
+      border: 2px solid var(--black);
+      background: var(--white);
+      color: var(--black);
+      box-shadow: 2px 2px 0 var(--black);
+      transition: none;
+    }
+    .skill-cloud .s:hover {
+      background: var(--yellow);
+      box-shadow: none;
+      transform: translate(2px, 2px);
+    }
+    .skill-cloud .s.cat {
+      border: none;
+      background: none;
+      box-shadow: none;
+      font-size: 11px;
+      color: var(--blue);
+      padding: 4px 8px 4px 0;
+      cursor: default;
+    }
+
+    /* === CONTACT === */
+    .contact-acts {
+      display: flex; gap: 10px; flex-wrap: wrap;
+    }
+    .contact-acts a {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-family: 'Bangers', cursive;
+      font-size: 16px;
+      padding: 10px 22px;
+      border: 2px solid var(--black);
+      background: var(--white);
+      color: var(--black);
+      text-decoration: none;
+      box-shadow: 3px 3px 0 var(--black);
+    }
+    .contact-acts a:hover {
+      background: var(--yellow);
+      box-shadow: none;
+      transform: translate(3px, 3px);
+    }
+
+    /* === FOOTER === */
+    footer {
+      text-align: center;
+      padding: 32px 0;
+      font-family: 'Bangers', cursive;
+      font-size: 14px;
+      letter-spacing: 1px;
+      color: var(--dark);
+      border-top: 3px solid var(--black);
+      margin-top: 24px;
+    }
+    footer a { color: var(--blue); text-decoration: none; }
+
+    /* === ACTION LINES DECO === */
+    .speedlines {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: -1;
+    }
+    .speedlines span {
+      position: absolute;
+      height: 2px;
+      background: var(--black);
+      opacity: .08;
+    }
+    .speedlines span:nth-child(1) { width: 120px; top: 30%; right: -20px; transform: rotate(-15deg); }
+    .speedlines span:nth-child(2) { width: 80px; top: 50%; right: -10px; transform: rotate(5deg); }
+    .speedlines span:nth-child(3) { width: 160px; top: 70%; right: -30px; transform: rotate(-8deg); }
+    .speedlines span:nth-child(4) { width: 90px; top: 20%; left: -20px; transform: rotate(12deg); }
+    .speedlines span:nth-child(5) { width: 130px; top: 60%; left: -30px; transform: rotate(-5deg); }
+
+    /* === ONOMATOPOEIA === */
+    .onoma {
+      position: absolute;
+      font-family: 'Bangers', cursive;
+      font-size: 40px;
+      color: var(--orange);
+      opacity: .12;
+      pointer-events: none;
+      z-index: -1;
+      transform: rotate(-10deg);
+    }
+    .onoma.t1 { top: 100px; right: 40px; font-size: 60px; color: var(--red); }
+    .onoma.t2 { bottom: 60px; left: 20px; font-size: 50px; color: var(--blue); transform: rotate(5deg); }
+    .onoma.t3 { top: 200px; left: -10px; font-size: 35px; color: var(--green); transform: rotate(-20deg); }
+
+    /* === RESPONSIVE === */
+    @media (max-width: 550px) {
+      .panel { padding: 24px 16px; }
+      .hero { padding: 40px 0 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="comic-bg"></div>
+
+  <nav>
+    <div class="container">
+      <div class="logo">0XJEYKALL</div>
+      <ul class="nav-links">
+        <li><a href="#about">ABOUT</a></li>
+        <li><a href="#writing">WRITING</a></li>
+        <li><a href="#skills">STACK</a></li>
+        <li><a href="#contact">CONTACT</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="speedlines">
+      <span></span><span></span><span></span><span></span><span></span>
+    </div>
+    <div class="onoma t1">KABOOM!</div>
+    <div class="onoma t2">ZAP!</div>
+    <div class="onoma t3">DEFI!</div>
+
+    <div class="container">
+      <div class="starburst">FEATURED ALPHA</div>
+
+      <div class="hero-main">
+        <div class="comic-frame">
+          <img src="https://pbs.twimg.com/profile_images/2008528460281733120/MF5U4hqF_400x400.jpg" alt="0xjeykall">
+          <div class="label">HIM</div>
+        </div>
+        <div>
+          <h1>0XJEYKALL<span class="hl">.</span>ETH</h1>
+          <div class="subtitle">Obsessed with DeFi &amp; on-chain truth</div>
+          <div class="handle-comic">
+            <a href="https://x.com/jeykall777" target="_blank">@jeykall777</a> &middot; base.eth
+          </div>
+
+          <div class="speech">
+            <p>Content writer by trade. Builder by nature. Part of @Creators_Alpha. Writing about DeFi, airdrop alpha, and modular blockchain. 12.7K+ posts and counting!</p>
+          </div>
+
+          <div class="hero-acts">
+            <a href="https://x.com/jeykall777" target="_blank" class="x-btn">X / @jeykall777</a>
+            <a href="https://www.bulbapp.io/u/F2c8F1Ejrv1pb3V5iyMfuajP5BkYikZznR8rMaM3Q7L6/jeykall" target="_blank">BULB</a>
+            <a href="https://opensea.io/jeykall" target="_blank">OPENSEA</a>
+            <a href="https://app.tria.so/?accessCode=HZ..." target="_blank">TRIA</a>
+          </div>
+
+          <div class="comic-stats">
+            <div class="c-stat"><span class="num">12.7K+</span><span class="lbl">Posts</span></div>
+            <div class="c-stat"><span class="num">1.6K+</span><span class="lbl">Followers</span></div>
+            <div class="c-stat"><span class="num">3+</span><span class="lbl">Years Web3</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="about">
+    <div class="container">
+      <div class="panel">
+        <div class="panel-label">ISSUE #001</div>
+        <h2>ORIGIN <span class="hl">STORY</span></h2>
+        <p>
+          I write about <strong>DeFi protocols</strong>, <strong>on-chain alpha</strong>, and
+          <strong>airdrop opportunities</strong>. Breaking down complex blockchain mechanisms
+          into something you can actually read. Covering DEX aggregators, modular blockchain
+          infrastructure, and everything in between. No fluff, just on-chain truth.
+        </p>
+        <div class="panel-grid" style="margin-top:20px;">
+          <div class="panel-box">
+            <h3>FOCUS AREAS</h3>
+            <ul>
+              <li>DeFi &amp; on-chain research</li>
+              <li>Airdrop strategies</li>
+              <li>Modular blockchain narratives</li>
+              <li>Web3 content &amp; ghostwriting</li>
+              <li>Community @ Creators_Alpha</li>
+            </ul>
+          </div>
+          <div class="panel-box">
+            <h3>PERSONA</h3>
+            <ul>
+              <li>Narrative-driven alpha</li>
+              <li>No fluff, just on-chain truth</li>
+              <li>Early adopter mindset</li>
+              <li>Builder > talker</li>
+              <li>Degen at heart</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="writing">
+    <div class="container">
+      <div class="panel">
+        <div class="panel-label">RECENT DROPS</div>
+        <h2>LATEST <span class="hl2">ISSUES</span></h2>
+        <div class="comic-strip">
+          <a class="strip-item" href="https://x.com/jeykall777/status/2047863203481473188" target="_blank">
+            <div class="meta">APR 25, 2026 &middot; X</div>
+            <h4>The modular revolution is just getting started</h4>
+            <p>Tria, XOOB, Nomisma — past bridge & swap into seamless digital experiences.</p>
+          </a>
+          <a class="strip-item" href="https://x.com/jeykall777/status/2043316356167434354" target="_blank">
+            <div class="meta">APR 12, 2026 &middot; X</div>
+            <h4>Quip Network — hard work pays off</h4>
+            <p>Node running, mindshare validation, and the $100k reward pool.</p>
+          </a>
+          <a class="strip-item" href="https://x.com/jeykall777/status/2033893480934871065" target="_blank">
+            <div class="meta">MAR 17, 2026 &middot; X</div>
+            <h4>SBT mandatory — bot filter + airdrop link</h4>
+            <p>Soulbound Tokens as permanent link between wallets and network incentives.</p>
+          </a>
+          <div class="strip-item">
+            <div class="meta">MAR 9, 2026 &middot; BULB</div>
+            <h4>DEX vs DEX Aggregator in DeFi</h4>
+            <p>Deep dive into how aggregation changes the game.</p>
+          </div>
+          <div class="strip-item">
+            <div class="meta">FEB 24, 2026 &middot; BULB</div>
+            <h4>ZachXBT — major investigation incoming</h4>
+            <p>On-chain detective work and what it means for the space.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="skills">
+    <div class="container">
+      <div class="panel">
+        <div class="panel-label">POWER LEVELS</div>
+        <h2>TOOLS &amp; <span class="hl">DOMAINS</span></h2>
+        <div class="skill-cloud">
+          <span class="s cat">DOMAINS</span>
+          <span class="s">DeFi</span>
+          <span class="s">On-chain Analysis</span>
+          <span class="s">Airdrop Farming</span>
+          <span class="s">Crypto Research</span>
+          <span class="s">Blockchain Narratives</span>
+          <span class="s cat">CRAFT</span>
+          <span class="s">Content Writing</span>
+          <span class="s">Ghostwriting</span>
+          <span class="s">Community Management</span>
+          <span class="s">X / Twitter Growth</span>
+          <span class="s">BULB Publishing</span>
+          <span class="s cat">WEB3</span>
+          <span class="s">ENS</span>
+          <span class="s">Modular Blockchain</span>
+          <span class="s">Web3 Tooling</span>
+          <span class="s">Alpha Hunting</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="container">
+      <div class="panel">
+        <div class="panel-label">CONNECT</div>
+        <h2>JOIN THE <span class="hl2">ADVENTURE</span></h2>
+        <p style="font-family:'Comic Neue',cursive;font-size:16px;color:var(--dark);margin-bottom:18px;">
+          DeFi takes, on-chain truth, airdrop alpha — daily on X.
+        </p>
+        <div class="contact-acts">
+          <a href="https://x.com/jeykall777" target="_blank">X / @jeykall777</a>
+          <a href="https://www.bulbapp.io/u/F2c8F1Ejrv1pb3V5iyMfuajP5BkYikZznR8rMaM3Q7L6/jeykall" target="_blank">BULB</a>
+          <a href="https://opensea.io/jeykall" target="_blank">OPENSEA</a>
+          <a href="https://app.tria.so/?accessCode=HZ..." target="_blank">TRIA</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    0xjeykall.eth &middot; base.eth &middot; <a href="https://x.com/jeykall777" target="_blank">@jeykall777</a>
+  </footer>
+
+</body>
+</html>
